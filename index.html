@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TABOO – The Ultimate English Vocabulary Game</title>
+<meta name="theme-color" content="#16103a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2316103a'/%3E%3Ccircle cx='32' cy='32' r='20' fill='none' stroke='%23ff6b35' stroke-width='6'/%3E%3Cpath d='M18 46L46 18' stroke='%23ff6b35' stroke-width='6'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#16103a;--bg2:#2a1659;--tx:#f4f0ff;--mu:#b6acd9;--pn:rgba(255,255,255,.08);--ln:rgba(255,255,255,.16);--ac:#ff6b35;--cy:#2de2e6;--card:#fffaf0;--ink:#1d1538;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#16103a}}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f3eefe;--bg2:#e2d6fb;--tx:#1d1538;--mu:#5b4f85;--pn:rgba(29,21,56,.06);--ln:rgba(29,21,56,.18);color-scheme:light}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;font:400 17px/1.45 Figtree,system-ui,sans-serif;color:var(--tx);background:radial-gradient(900px 600px at 85% -10%,var(--bg2),transparent 60%),var(--bg);overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+h1,h2,h3{font-family:"Bricolage Grotesque",Figtree,system-ui,sans-serif;margin:0;line-height:1.05}
+#app{max-width:560px;margin:0 auto;padding:18px 18px 28px;display:flex;flex-direction:column;gap:14px;min-height:100vh}
+.logo{font:800 clamp(64px,22vw,110px)/.9 "Bricolage Grotesque",sans-serif;letter-spacing:-.04em;display:flex;align-items:center;gap:2px}
+.logo i{display:inline-block;width:.62em;height:.62em;border:.11em solid var(--ac);border-radius:50%;position:relative;transform:rotate(-12deg);animation:wob 5s ease-in-out infinite}
+.logo i::after{content:"";position:absolute;left:50%;top:-12%;width:.11em;height:124%;background:var(--ac);transform:rotate(45deg)}
+@keyframes wob{50%{transform:rotate(14deg)}}
+.sub{color:var(--mu)}
+.btn{font:700 18px Figtree,sans-serif;border:0;border-radius:16px;padding:17px 20px;min-height:56px;color:var(--tx);background:var(--pn);border:1.5px solid var(--ln);width:100%;cursor:pointer;transition:transform .12s}
+.btn:active{transform:scale(.97)}.btn:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--cy);outline-offset:2px}
+.pri{background:var(--ac);color:#1d1538;border-color:var(--ac)}.big{font-size:21px;min-height:66px}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.pan{background:var(--pn);border:1.5px solid var(--ln);border-radius:20px;padding:16px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.stats b{display:block;font:800 30px "Bricolage Grotesque",sans-serif}.stats span{font-size:13px;color:var(--mu)}
+.bar{height:10px;border-radius:9px;background:var(--pn);overflow:hidden;margin:6px 0 10px}.bar>div{height:100%;border-radius:9px;transition:width .5s}
+.lv{display:flex;align-items:center;justify-content:space-between;text-align:left;border-left:8px solid var(--c)}
+.lv small{display:block;color:var(--mu);font-weight:600}.lv b{font:800 24px "Bricolage Grotesque"}
+.back{background:none;border:0;color:var(--mu);font:600 16px Figtree;padding:8px 0;align-self:flex-start;min-height:44px;cursor:pointer}
+.tc{background:var(--card);color:var(--ink);border-radius:26px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.4);animation:flip .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes flip{from{transform:rotateX(70deg) translateY(30px);opacity:0}}
+.tc .t{padding:22px 18px 18px;text-align:center;background:var(--c);color:#1d1538}
+.tc .t h2{font-size:clamp(34px,11vw,56px);text-transform:uppercase;letter-spacing:-.02em;overflow-wrap:anywhere}
+.tc .m{font-weight:700;font-size:14px;opacity:.8;margin-bottom:6px}
+.tc ul{list-style:none;margin:0;padding:14px 18px 20px;display:grid;gap:8px}
+.tc li{font:700 21px Figtree;text-align:center;padding:10px;border-radius:12px;background:#ffe3e1;color:#b3202a;text-transform:capitalize;text-decoration:line-through;text-decoration-thickness:2px}
+.tc h3{text-align:center;font-size:14px;color:#b3202a;padding-top:14px}
+.ring{width:84px;height:84px;margin:0 auto;position:relative}.ring svg{transform:rotate(-90deg)}.ring b{position:absolute;inset:0;display:grid;place-items:center;font:800 26px "Bricolage Grotesque"}
+.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{flex:0 0 auto;width:auto;padding:10px 16px;min-height:44px;font-size:16px}.on{background:var(--cy);color:#1d1538;border-color:var(--cy)}
+select,input[type=number]{width:100%;font:600 17px Figtree;padding:13px;border-radius:12px;border:1.5px solid var(--ln);background:var(--bg);color:var(--tx)}
+.mod{position:fixed;inset:0;background:rgba(10,6,30,.75);display:grid;place-items:center;padding:20px;z-index:20}.mod .pan{background:var(--bg2);max-width:380px;width:100%;display:grid;gap:12px}
+.ctr{text-align:center;margin:auto 0;display:grid;gap:16px}
+.hw{font-size:60px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(min-width:700px){#app{padding-top:40px}}
+</style></head><body><div id="app"></div>
+<script>
+/* ===== VOCABULARY DATABASE (edit here: Category|target|forbidden1,...,forbidden5) ===== */
+const D={easy:`Animals|butterfly|wings,insect,fly,colourful,flower
+Animals|elephant|big,trunk,grey,Africa,animal
+Animals|zoo|animals,cage,visit,lions,park
+Food and Drinks|sandwich|bread,cheese,lunch,ham,eat
+Food and Drinks|banana|yellow,fruit,monkey,peel,sweet
+Family|grandmother|mother,old,grandma,family,parent
+Family|cousin|uncle,aunt,family,relative,child
+School|homework|school,teacher,do,home,exercise
+School|backpack|bag,school,books,carry,shoulders
+Clothes|scarf|neck,warm,winter,wool,wear
+Clothes|sneakers|shoes,sport,run,feet,trainers
+Colours|rainbow|colours,rain,sky,seven,sun
+Numbers|dozen|12,eggs,number,count,twelve
+Daily Routines|alarm clock|wake,morning,sleep,ring,time
+Daily Routines|breakfast|morning,meal,eat,first,cereal
+Hobbies|painting|brush,colour,art,picture,draw
+Hobbies|guitar|music,strings,play,instrument,song
+Sports|goalkeeper|football,goal,catch,ball,team
+Sports|swimming|water,pool,sea,summer,fast
+Weather|snowman|snow,winter,cold,carrot,ball
+Weather|thunderstorm|rain,lightning,loud,sky,noise
+Home|fridge|cold,food,kitchen,milk,freezer
+Home|bedroom|sleep,bed,night,pillow,house
+Transport|bicycle|wheels,ride,pedal,two,road
+Transport|airport|plane,fly,travel,passport,flight
+Body Parts|elbow|arm,bend,body,knee,joint
+Body Parts|eyebrow|eye,hair,face,above,forehead
+Places|library|books,read,quiet,borrow,school
+Jobs|firefighter|fire,water,truck,rescue,hose
+Jobs|dentist|teeth,tooth,doctor,mouth,brush`,
+medium:`Emotions|jealous|envy,feel,friend,want,angry
+Emotions|embarrassed|shy,red,face,ashamed,feel
+Personality|generous|give,money,kind,share,gift
+Personality|stubborn|change,mind,refuse,donkey,opinion
+Technology|password|secret,computer,login,letters,account
+Technology|download|internet,file,save,computer,upload
+Environment|recycle|bin,plastic,paper,reuse,waste
+Environment|pollution|dirty,air,factory,smoke,environment
+Travel|luggage|suitcase,bag,airport,travel,pack
+Travel|souvenir|gift,holiday,remember,buy,trip
+Education|scholarship|money,university,study,student,pay
+Education|graduate|university,degree,finish,diploma,student
+Relationships|argue|fight,shout,disagree,angry,friend
+Relationships|colleague|work,office,job,coworker,partner
+Entertainment|audience|watch,theatre,people,show,concert
+Entertainment|trailer|film,movie,short,preview,cinema
+Health|prescription|doctor,medicine,pharmacy,paper,pills
+Health|vaccine|injection,virus,doctor,needle,disease
+Society|volunteer|work,free,help,charity,unpaid
+Society|neighbour|next,door,live,house,street
+Communication|gossip|talk,rumour,secret,people,behind
+Communication|translate|language,words,meaning,dictionary,change
+Nature|waterfall|river,cliff,mountain,rock,stream
+Nature|volcano|lava,mountain,erupt,hot,smoke
+Shopping|discount|cheaper,sale,price,percent,shop
+Shopping|receipt|paper,shop,proof,buy,money
+Culture|tradition|custom,old,family,festival,celebrate
+Culture|festival|music,celebrate,party,crowd,holiday
+Everyday Situations|appointment|doctor,meeting,time,book,date
+Everyday Situations|queue|line,wait,people,stand,shop`,
+hard:`Psychology|anxiety|worry,nervous,fear,stress,mind
+Psychology|motivation|goal,reason,encourage,energy,want
+Social Issues|inequality|rich,poor,fair,gap,rights
+Social Issues|homelessness|street,house,sleep,poor,shelter
+Science|hypothesis|theory,experiment,guess,prove,scientist
+Science|evidence|proof,court,facts,show,support
+Politics and Society|democracy|vote,government,people,election,free
+Politics and Society|citizen|country,nationality,rights,live,passport
+Media Literacy|propaganda|government,lies,influence,persuade,war
+Media Literacy|misinformation|fake,news,false,wrong,internet
+Globalization|immigrant|move,country,foreign,live,abroad
+Globalization|outsourcing|company,work,abroad,cheaper,jobs
+Human Behaviour|procrastinate|delay,later,tomorrow,homework,lazy
+Human Behaviour|hesitate|pause,doubt,sure,wait,decide
+Abstract Concepts|freedom|free,rights,choose,prison,independent
+Abstract Concepts|ambition|goal,dream,success,want,career
+Philosophy|ethics|moral,right,wrong,values,principles
+Philosophy|paradox|contradiction,strange,seems,true,puzzle
+Economics|inflation|prices,rise,money,cost,economy
+Economics|unemployment|job,work,lose,without,income
+Communication|negotiate|agree,deal,discuss,compromise,talk
+Cultural Differences|stereotype|group,opinion,generalise,unfair,belief
+Academic Vocabulary|analyse|examine,detail,study,data,research
+Academic Vocabulary|summarise|short,main,points,text,shorter
+Idioms|break the ice|start,conversation,cold,shy,meeting
+Idioms|piece of cake|easy,dessert,simple,sweet,test
+Idioms|spill the beans|secret,tell,reveal,food,accident
+Advanced Verbs and Adjectives|reluctant|unwilling,want,agree,force,slow
+Advanced Verbs and Adjectives|persuade|convince,argue,change,mind,influence
+Advanced Verbs and Adjectives|ambiguous|clear,unclear,meaning,two,confusing`};
+/* ===== APP ===== */
+const LV={easy:{n:"Easy",cef:"A1–A2",c:"#34d399"},medium:{n:"Medium",cef:"A2–B1",c:"#fbbf24"},hard:{n:"Hard",cef:"B1–B2",c:"#fb7185"}};
+const CARDS={};for(const k in D)CARDS[k]=D[k].trim().split("\n").map(r=>{const[c,w,f]=r.split("|");return{c,w,f:f.split(","),l:k}});
+const K="taboo-v1",$=s=>document.querySelector(s),keys=Object.keys(LV);
+let S={used:{easy:[],medium:[],hard:[]},cfg:{timer:0,random:true,cat:"All",mode:"classic"}};
+try{const r=JSON.parse(localStorage.getItem(K));if(r){S.used={...S.used,...r.used};S.cfg={...S.cfg,...r.cfg}}}catch(e){}
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+const left=(l,c="All")=>CARDS[l].filter(x=>!S.used[l].includes(x.w)&&(c==="All"||x.c===c));
+const cats=l=>[...new Set(CARDS[l].map(x=>x.c))];
+const allCats=()=>[...new Set(keys.flatMap(cats))];
+const tot=l=>CARDS[l].length,usedN=l=>S.used[l].length;
+let V="home",cur=null,lvl=null,cat="All",tm=null,tl=0,sess=0,M=null;
+function go(v){clearInterval(tm);V=v;render()}
+function ask(msg,fn){M={msg,fn};render()}
+function pick(){const c=S.cfg.mode==="category"?cat:S.cfg.cat,p=left(lvl,c);if(!p.length)return null;
+const x=S.cfg.random?p[Math.floor(Math.random()*p.length)]:p[0];S.used[lvl].push(x.w);save();sess++;return x}
+function chooseLevel(l){lvl=l;cat="All";if(!left(l,S.cfg.mode==="classic"?S.cfg.cat:"All").length)return go("done");go(S.cfg.mode==="category"?"cat":"ready")}
+function show(){cur=pick();if(!cur)return go("done");V="card";render();
+if(S.cfg.timer>0){tl=S.cfg.timer;clearInterval(tm);tm=setInterval(()=>{tl--;const b=$("#tb"),r=$("#tr");if(b)b.textContent=tl;if(r)r.style.strokeDashoffset=226*(1-tl/S.cfg.timer);if(tl<=0){cur=null;go("time")}},1000)}}
+function reset(l){ask(l?"Reset all used cards in the "+LV[l].n+" level?":"Reset the entire game? All progress will be erased.",()=>{(l?[l]:keys).forEach(k=>S.used[k]=[]);if(!l)sess=0;save();M=null;render()})}
+const bar=(l)=>`<div class="bar"><div style="width:${usedN(l)/tot(l)*100}%;background:${LV[l].c}"></div></div>`;
+const back=(v)=>`<button class="back" onclick="go('${v}')">← Back</button>`;
+const totalAll=()=>keys.reduce((a,l)=>a+tot(l),0),usedAll=()=>keys.reduce((a,l)=>a+usedN(l),0);
+const doneLv=()=>keys.filter(l=>usedN(l)>=tot(l)).length;
+const views={
+home:()=>`<div style="padding-top:10px"><div class="logo">TABO<i></i></div><p class="sub" style="margin:8px 0 0">The Ultimate English Vocabulary Game</p></div>
+<h2 style="font-size:30px;margin-top:6px">Ready to challenge your vocabulary?</h2>
+<div class="stats pan"><div><b>${totalAll()}</b><span>Cards available</span></div><div><b>${usedAll()}</b><span>Cards played</span></div><div><b>${doneLv()}</b><span>Levels completed</span></div></div>
+<button class="btn pri big" onclick="go('mode')">START GAME</button>
+<div class="row"><button class="btn" onclick="go('teacher')">TEACHER MODE</button><button class="btn" onclick="go('stats')">STATISTICS</button></div>
+<div class="pan"><h3 style="margin-bottom:8px">How to play</h3><ol style="margin:0;padding-left:22px">
+<li>Pass the phone to one player and pick a level.</li><li>Tap “I’m ready” to reveal the word. Keep the screen hidden from the class.</li><li>Explain the word in English. Never say a forbidden word, or part of one.</li><li>Classmates guess. Tap Next round to hide the card.</li></ol></div>`,
+mode:()=>`${back("home")}<h2>Choose a game mode</h2>
+<button class="btn ${S.cfg.mode==="classic"?"on":""}" style="text-align:left" onclick="S.cfg.mode='classic';save();go('level')"><b>Classic Taboo</b><br><span style="font-weight:400">A random word. Explain it without the forbidden words.</span></button>
+<button class="btn ${S.cfg.mode==="category"?"on":""}" style="text-align:left" onclick="S.cfg.mode='category';save();go('level')"><b>Category Challenge</b><br><span style="font-weight:400">Pick a category and get a random word from it.</span></button>`,
+level:()=>`${back("home")}<div><h2>Pass the phone</h2><p class="sub" style="margin:6px 0 0">Choose a level for this round.</p></div>
+${keys.map(l=>`<button class="btn lv" style="--c:${LV[l].c}" onclick="chooseLevel('${l}')"><span><b>${LV[l].n}</b><small>${LV[l].cef} · ${left(l).length} cards left</small></span><span style="font-size:26px">›</span></button>`).join("")}`,
+cat:()=>`${back("level")}<h2>Choose a category</h2><p class="sub" style="margin:0">${LV[lvl].n} level</p>
+${cats(lvl).map(c=>{const n=left(lvl,c).length;return `<button class="btn" ${n?"":"disabled style='opacity:.45'"} style="text-align:left" onclick="cat='${c.replace(/'/g,"\\'")}';go('ready')">${c} <span class="sub">· ${n} left</span></button>`}).join("")}`,
+ready:()=>`<div class="ctr" style="flex:1"><div class="hw">🤫</div><h2>Player, you’re up!</h2><p class="sub">${LV[lvl].n} level${S.cfg.mode==="category"?" · "+cat:""}<br>Make sure nobody can see your screen.</p>
+<button class="btn pri big" onclick="show()">I’M READY — SHOW MY WORD</button><button class="btn" onclick="go('level')">Change level</button></div>`,
+card:()=>`<div class="tc" style="--c:${LV[cur.l].c}"><div class="t"><div class="m">${LV[cur.l].n} · ${cur.c}</div><h2>${cur.w}</h2></div><h3>Forbidden words</h3><ul>${cur.f.map(f=>`<li>${f}</li>`).join("")}</ul></div>
+${S.cfg.timer?`<div class="ring"><svg width="84" height="84"><circle cx="42" cy="42" r="36" fill="none" stroke="var(--ln)" stroke-width="8"/><circle id="tr" cx="42" cy="42" r="36" fill="none" stroke="var(--cy)" stroke-width="8" stroke-linecap="round" stroke-dasharray="226" stroke-dashoffset="0" style="transition:stroke-dashoffset 1s linear"/></svg><b id="tb">${tl}</b></div>`:""}
+<div style="margin-top:auto;display:grid;gap:10px"><button class="btn pri big" onclick="cur=null;go('level')">NEXT ROUND</button><div class="row"><button class="btn" onclick="show()">SKIP</button><button class="btn" onclick="cur=null;go('home')">END ROUND</button></div></div>`,
+time:()=>`<div class="ctr" style="flex:1"><div class="hw">⏰</div><h2>Time’s up!</h2><p class="sub">The card is hidden. Did your class guess it?</p>
+<button class="btn pri big" onclick="go('level')">NEXT ROUND</button><button class="btn" onclick="go('ready')">START AGAIN</button><button class="btn" onclick="go('home')">Home</button></div>`,
+done:()=>`<div class="ctr" style="flex:1"><div class="hw">🏆</div><h2>Congratulations! You’ve completed this level!</h2><p class="sub">No unused cards are left${S.cfg.cat!=="All"&&S.cfg.mode==="classic"?" in the category “"+S.cfg.cat+"”":""}.</p>
+<button class="btn pri" onclick="go('level')">Choose another level</button><button class="btn" onclick="reset('${lvl}')">Reset this level</button><button class="btn" onclick="go('home')">Home</button></div>`,
+stats:()=>{const comp=allCats().filter(c=>keys.every(l=>CARDS[l].filter(x=>x.c===c).every(x=>S.used[l].includes(x.w))&&CARDS[l].some(x=>x.c===c)));
+return `${back("home")}<h2>Game statistics</h2><div class="stats pan"><div><b>${usedAll()}</b><span>Total played</span></div><div><b>${totalAll()-usedAll()}</b><span>Remaining</span></div><div><b>${sess}</b><span>This session</span></div></div>
+<div class="pan">${keys.map(l=>`<b>${LV[l].n}</b> <span class="sub">${usedN(l)} played · ${tot(l)-usedN(l)} left</span>${bar(l)}`).join("")}</div>
+<div class="pan"><b>Completed categories</b><p class="sub" style="margin:6px 0 0">${comp.length?comp.join(", "):"None yet. Finish every card in a category to complete it."}</p></div>
+<p class="sub">No personal information is collected. Progress is saved on this device only.</p>`},
+teacher:()=>`${back("home")}<h2>Teacher mode</h2>
+<div class="pan">${keys.map(l=>`<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span><b>${LV[l].n}</b> <span class="sub">${usedN(l)} used · ${tot(l)-usedN(l)} unused of ${tot(l)}</span></span><button class="btn chip" onclick="reset('${l}')">Reset</button></div>${bar(l)}`).join("")}
+<button class="btn" onclick="reset()">Reset all cards</button></div>
+<div class="pan"><b>Round timer</b><div class="chips" style="margin:10px 0">${[0,30,45,60,90].map(t=>`<button class="btn chip ${S.cfg.timer===t?"on":""}" onclick="S.cfg.timer=${t};save();render()">${t?t+" s":"No timer"}</button>`).join("")}</div>
+<label class="sub" for="ct">Custom duration (10–300 seconds)</label><input id="ct" type="number" min="10" max="300" value="${[0,30,45,60,90].includes(S.cfg.timer)?"":S.cfg.timer}" placeholder="e.g. 75" onchange="const v=Math.min(300,Math.max(10,+this.value||0));if(v){S.cfg.timer=v;save();render()}"></div>
+<div class="pan"><b>Card selection</b><div class="chips" style="margin:10px 0"><button class="btn chip ${S.cfg.random?"on":""}" onclick="S.cfg.random=true;save();render()">Random</button><button class="btn chip ${S.cfg.random?"":"on"}" onclick="S.cfg.random=false;save();render()">In order</button></div>
+<label class="sub" for="cs">Category for Classic mode</label><select id="cs" onchange="S.cfg.cat=this.value;save()"><option>All</option>${allCats().map(c=>`<option ${S.cfg.cat===c?"selected":""}>${c}</option>`).join("")}</select></div>
+<p class="sub">Words are never shown on this screen, so students can’t see answers.</p>`
+};
+function render(){$("#app").innerHTML=views[V]()+(M?`<div class="mod" role="dialog" aria-modal="true"><div class="pan"><h3>Are you sure?</h3><p style="margin:0">${M.msg}</p><div class="row"><button class="btn" onclick="M=null;render()">Cancel</button><button class="btn pri" onclick="M.fn()">Yes, reset</button></div></div></div>`:"");scrollTo(0,0)}
+try{const mf=new Blob([JSON.stringify({name:"TABOO",short_name:"TABOO",start_url:".",display:"standalone",background_color:"#16103a",theme_color:"#16103a"})],{type:"application/manifest+json"});const l=document.createElement("link");l.rel="manifest";l.href=URL.createObjectURL(mf);document.head.appendChild(l)}catch(e){}
+render();
+</script></body></html>
